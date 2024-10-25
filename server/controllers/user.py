@@ -1,8 +1,8 @@
 from flask import request
 from flask_jwt_extended import create_access_token
-from utils.serverUtils import bcrypt
-from db.connection import db
-from utils.response import ApiResponse, ApiError
+from ..utils.serverUtils import bcrypt
+from ..db.connection import db
+from ..utils.response import APIResponse, APIError
 
 def login():
     body = request.get_json()
@@ -10,13 +10,13 @@ def login():
     if user and "password" in user:
         if bcrypt.check_password_hash(user["password"], body["password"]):
             token = create_access_token(identity=body["email"])
-            return ApiResponse(200, {
+            return APIResponse(200, {
                 "name": user["name"],
                 "email": user["email"],
                 "token": token
             }).json
-        return ApiError(200, "Password incorrect").json
-    return ApiError(200, "Email id not registered").json
+        return APIError(200, "Password incorrect").json
+    return APIError(200, "Email id not registered").json
 
 def signup():
     body = request.get_json()
@@ -31,5 +31,5 @@ def signup():
         }
         db.users.insert_one(user)
 
-        return ApiResponse(200, None).json
-    return ApiError(200, "Email id already exists").json
+        return APIResponse(200, None).json
+    return APIError(200, "Email id already exists").json

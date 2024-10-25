@@ -1,4 +1,4 @@
-from response import APIResponse
+from .response import APIResponse
 from functools import wraps
 
 class ApiError(APIResponse):

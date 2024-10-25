@@ -9,6 +9,10 @@ app.config.from_pyfile("config.py")
 
 app.register_blueprint(user)
 
+@app.route("/")
+def home():
+    return "Hello World"
+
 @app.errorhandler(HTTPException)
 def httpExeptionHandler(error):
     return APIError(error.code, error.description).json
