@@ -1,7 +1,7 @@
-from .ApiResponse import ApiResponse
+from response import APIResponse
 from functools import wraps
 
-class ApiError(ApiResponse):
+class ApiError(APIResponse):
     def __init__(self, status: int, message: str):
         super().__init__(status, None, message=message, success=False)
 
