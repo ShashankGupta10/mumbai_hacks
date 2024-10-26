@@ -36,6 +36,8 @@ def payment():
         if (data['type'] == 'payment_intent.succeeded'):
             post_message("Payment successful for ORDER ID 1 by *919324879383*", "917700013317")
             post_message("Payment successful", "919324879383")
+            post_message("Share your location for delivery of the merchandise", "919324879383")
+
             db.whatsapp.update_one({
                 "number": "917700013317"
             }, {
@@ -46,6 +48,7 @@ def payment():
                     }
                 }
             })
+
             return jsonify("Payment successful")
     return jsonify("Payment failed")
 
@@ -124,8 +127,8 @@ def webhook():
                         return jsonify("Invalid command")
             case 'location':            
                 db.whatsapp.update_one(
-                    {'contact.phone': message_info['from']},
-                    {'$set': {'contact.$[elem].location': message_info['location']}},
+                    {'contacts.phone': message_info['from']},
+                    {'$set': {'contacts.$[elem].location': message_info['location']}},
                     array_filters=[{'elem.phone': message_info['from']}]
                 )
                 post_message("Location added successfully", message_info['from'])
