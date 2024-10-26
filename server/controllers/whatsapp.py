@@ -76,6 +76,7 @@ def webhook():
                         }
                         db.whatsapp.insert_one(client_data)
                         post_message("Successfully registered!!", message_info['from'])
+                        post_message("Now attach contacts to include them into your customer base.", message_info['from'])
                         print("REGISTERED")
                         return jsonify("User created successfully")
                     
@@ -132,6 +133,13 @@ def webhook():
                     array_filters=[{'elem.phone': message_info['from']}]
                 )
                 post_message("Location added successfully", message_info['from'])
+
+                user = db.whatsapp.find_one({"contacts.phone": message_info['from']})
+                latitude = message_info['location']['latitude']
+                longitude = message_info['location']['longitude']
+                post_message("Location of the customer is:", user['number'])
+                post_message(f"https://www.google.com/maps?q={latitude},{longitude}", user['number'])
+
                 return jsonify("Location added successfully")
 
             case 'image':
